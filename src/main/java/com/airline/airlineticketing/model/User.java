@@ -26,4 +26,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true)
+    private String role;
+
+    public User(String username, String password, Long mobileNumber, String role) {
+    }
 }

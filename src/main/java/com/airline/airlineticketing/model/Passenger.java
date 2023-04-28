@@ -30,4 +30,8 @@ public class Passenger {
     @Column(name = "phone_number", unique = true, nullable = false)
     private Long phoneNumber;
 
+    public Passenger(String firstName, String email) {
+        this.firstName = firstName;
+        this.email = email;
+    }
 }

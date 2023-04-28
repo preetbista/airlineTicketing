@@ -27,6 +27,21 @@ public class Ticket {
     @Column(name = "flight_number", nullable = false)
     private String flightNumber;
 
+    @Column(name = "departure_airport", nullable = false)
+    private String departureAirport;
+
+    @Column(name = "arrival_airport", nullable = false)
+    private String arrivalAirport;
+
     @Column(name = "departure_time", nullable = false)
     private LocalDateTime departureTime;
+
+    @Column(name = "arrival_time", nullable = false)
+    private LocalDateTime arrivalTime;
+
+    @Column(nullable = false)
+    private double price;
+
+    public Ticket(Passenger passenger) {
+    }
 }
