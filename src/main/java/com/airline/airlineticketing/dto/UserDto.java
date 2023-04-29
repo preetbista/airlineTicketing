@@ -8,25 +8,20 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserDto implements Serializable {
-    private Long id;
 
     private Long mobileNumber;
 
-    private String username;
+    private String userName;
 
     private String password;
 
     private String role;
 
-    public UserDto(Long id, Long mobileNumber, String username, String password, String role) {
-        this.id = id;
-        this.mobileNumber = mobileNumber;
-        this.username = username;
+    public UserDto(String userName, String password, Long mobileNumber, String role) {
+        this.userName = userName;
         this.password = password;
+        this.mobileNumber = mobileNumber;
         this.role = role;
-    }
-
-    public UserDto(Long id, String userName, String password, Long mobileNumber, String role) {
     }
 
     public UserDto() {

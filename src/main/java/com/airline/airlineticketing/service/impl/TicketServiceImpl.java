@@ -1,12 +1,9 @@
 package com.airline.airlineticketing.service.impl;
 
 import com.airline.airlineticketing.dto.TicketDto;
-import com.airline.airlineticketing.model.Passenger;
 import com.airline.airlineticketing.model.Ticket;
-import com.airline.airlineticketing.repository.PassengerRepository;
 import com.airline.airlineticketing.repository.TicketRepository;
 import com.airline.airlineticketing.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,27 +15,30 @@ import java.util.Optional;
 @Transactional
 public class TicketServiceImpl implements TicketService {
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
 
-    @Autowired
-    private PassengerRepository passengerRepository;
+    public TicketServiceImpl(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     @Override
     @Transactional
     public TicketDto createTicket(TicketDto ticketDTO) {
-        Optional<Passenger> optionalPassenger = passengerRepository.findById(ticketDTO.getId());
+        Ticket ticket = new Ticket(
+                ticketDTO.getFlightNumber(),
+                ticketDTO.getDepartureAirport(),
+                ticketDTO.getArrivalAirport(),
+                ticketDTO.getDepartureTime(),
+                ticketDTO.getArrivalTime(),
+                ticketDTO.getPrice());
+        Ticket savedTicket = ticketRepository.save(ticket);
+        return new TicketDto(savedTicket.getFlightNumber(),
+                savedTicket.getArrivalAirport(),
+                savedTicket.getDepartureAirport(),
+                savedTicket.getArrivalTime(),
+                savedTicket.getDepartureTime(),
+                savedTicket.getPrice());
 
-        if (optionalPassenger.isPresent()) {
-            Passenger passenger = optionalPassenger.get();
-            Ticket ticket = new Ticket(passenger);
-            ticket.setPrice(ticketDTO.getPrice());
-            ticketRepository.save(ticket);
-
-            return new TicketDto(ticket);
-        }
-
-        return null;
     }
 
     @Override
@@ -46,7 +46,14 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> tickets = ticketRepository.findAll();
         List<TicketDto> ticketDTOs = new ArrayList<>();
         for (Ticket ticket : tickets) {
-            ticketDTOs.add(new TicketDto(ticket));
+            ticketDTOs.add(new TicketDto(
+                    ticket.getFlightNumber(),
+                    ticket.getDepartureAirport(),
+                    ticket.getArrivalAirport(),
+                    ticket.getDepartureTime(),
+                    ticket.getArrivalTime(),
+                    ticket.getPrice()
+            ));
         }
         return ticketDTOs;
     }
@@ -54,8 +61,16 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketDto getTicketById(Long id) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        return optionalTicket.map(TicketDto::new).orElse(null);
+        if (optionalTicket.isPresent()) {
+            Ticket ticket = optionalTicket.get();
+            return new TicketDto(ticket.getFlightNumber(),
+                    ticket.getDepartureAirport(),
+                    ticket.getArrivalAirport(),
+                    ticket.getDepartureTime(),
+                    ticket.getArrivalTime(),
+                    ticket.getPrice());
+        } else {
+            return null;
+        }
     }
-
-
 }

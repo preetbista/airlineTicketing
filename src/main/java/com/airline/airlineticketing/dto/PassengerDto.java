@@ -1,16 +1,14 @@
 package com.airline.airlineticketing.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-public class PassengerDto  {
-    private Long id;
+public class PassengerDto implements Serializable {
+
 
     private String firstName;
 
@@ -20,10 +18,11 @@ public class PassengerDto  {
 
     private Long phoneNumber;
 
-    public PassengerDto(Long id, String firstName, String email) {
-        this.id = id;
+    public PassengerDto( String firstName, String email, String lastName, Long phoneNumber) {
         this.firstName = firstName;
         this.email = email;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
     }
 
     public PassengerDto() {

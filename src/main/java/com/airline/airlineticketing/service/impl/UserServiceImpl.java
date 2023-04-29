@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -21,32 +20,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDTO) {
-        User user = new User(userDTO.getUsername(),
+        User user = new User(userDTO.getUserName(),
                 userDTO.getPassword(), userDTO.getMobileNumber(), userDTO.getRole());
         User savedUser = userRepository.save(user);
-        return new UserDto(savedUser.getId(), savedUser.getUserName(),
+        return new UserDto(savedUser.getUserName(),
                 savedUser.getPassword(), savedUser.getMobileNumber(), savedUser.getRole());
     }
 
     @Override
+    @Transactional
     public UserDto getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return new UserDto(user.getId(), user.getUserName(),
-                    user.getPassword(), user.getMobileNumber(), user.getRole());
+            return new UserDto(user.getUserName(),
+                    user.getPassword(),
+                    user.getMobileNumber(),
+                    user.getRole());
         } else {
             return null;
         }
     }
 
     @Override
+    @Transactional
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDTOs = new ArrayList<>();
         for (User user : users) {
-            userDTOs.add(new UserDto(user.getId(), user.getUserName(), user.getPassword(), user.getMobileNumber(), user.getRole()));
+            userDTOs.add(new UserDto(
+                    user.getUserName(),
+                    user.getPassword(),
+                    user.getMobileNumber(),
+                    user.getRole()));
         }
         return userDTOs;
     }

@@ -2,7 +2,6 @@ package com.airline.airlineticketing.controller;
 
 import com.airline.airlineticketing.dto.TicketDto;
 import com.airline.airlineticketing.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,22 +9,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ticket")
+@RequestMapping("/tickets")
 public class TicketController {
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
 
-    @PostMapping("/tickets")
-    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDTO) {
-        TicketDto newTicketDTO = ticketService.createTicket(ticketDTO);
-        if (newTicketDTO != null) {
-            return new ResponseEntity<>(newTicketDTO, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
 
-    @GetMapping("/tickets")
+    @PostMapping
+    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDTO) {
+        TicketDto newTicketDTO = ticketService.createTicket(ticketDTO);
+        return ResponseEntity.ok(newTicketDTO);
+    }
+
+    @GetMapping
     public ResponseEntity<List<TicketDto>> getAllTickets() {
         List<TicketDto> tickets = ticketService.getAllTickets();
         if (tickets.isEmpty()) {
@@ -34,13 +32,14 @@ public class TicketController {
             return new ResponseEntity<>(tickets, HttpStatus.OK);
         }
     }
-    @GetMapping("/tickets/{ticketId}")
+
+    @GetMapping("/{ticketId}")
     public ResponseEntity<TicketDto> getTicketById(@PathVariable Long ticketId) {
         TicketDto ticket = ticketService.getTicketById(ticketId);
         if (ticket != null) {
-            return new ResponseEntity<>(ticket, HttpStatus.OK);
+            return ResponseEntity.ok(ticket);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.noContent().build();
         }
     }
 

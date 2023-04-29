@@ -31,5 +31,9 @@ public class User {
     private String role;
 
     public User(String username, String password, Long mobileNumber, String role) {
+        this.userName = username;
+        this.password = password;
+        this.mobileNumber = mobileNumber;
+        this.role = role;
     }
 }

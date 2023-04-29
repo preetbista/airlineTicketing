@@ -22,10 +22,16 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public PassengerDto createPassenger(PassengerDto passengerDTO) {
-        Passenger passenger = new Passenger(passengerDTO.getFirstName(), passengerDTO.getEmail());
+        Passenger passenger = new Passenger(passengerDTO.getFirstName(),
+                passengerDTO.getEmail(),
+                passengerDTO.getLastName(),
+                passengerDTO.getPhoneNumber());
         Passenger savedPassenger = passengerRepository.save(passenger);
-        return new PassengerDto(savedPassenger.getId(),
-                savedPassenger.getFirstName(), savedPassenger.getEmail());
+        return new PassengerDto(
+                savedPassenger.getFirstName(),
+                savedPassenger.getEmail(),
+                savedPassenger.getLastName(),
+                savedPassenger.getPhoneNumber());
     }
 
     @Override
@@ -33,7 +39,11 @@ public class PassengerServiceImpl implements PassengerService {
         Optional<Passenger> optionalPassenger = passengerRepository.findById(id);
         if (optionalPassenger.isPresent()) {
             Passenger passenger = optionalPassenger.get();
-            return new PassengerDto(passenger.getId(), passenger.getFirstName(), passenger.getEmail());
+            return new PassengerDto(
+                    passenger.getFirstName(),
+                    passenger.getEmail(),
+                    passenger.getLastName(),
+                    passenger.getPhoneNumber());
         } else {
             return null;
         }
@@ -44,8 +54,10 @@ public class PassengerServiceImpl implements PassengerService {
         List<Passenger> passengers = passengerRepository.findAll();
         List<PassengerDto> passengerDTOs = new ArrayList<>();
         for (Passenger passenger : passengers) {
-            passengerDTOs.add(new PassengerDto(passenger.getId(),
-                    passenger.getFirstName(), passenger.getEmail()));
+            passengerDTOs.add(new PassengerDto(
+                    passenger.getFirstName(), passenger.getEmail(),
+                    passenger.getLastName(),
+                    passenger.getPhoneNumber()));
         }
         return passengerDTOs;
     }

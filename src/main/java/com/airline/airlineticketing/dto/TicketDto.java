@@ -1,6 +1,5 @@
 package com.airline.airlineticketing.dto;
 
-import com.airline.airlineticketing.model.Ticket;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TicketDto implements Serializable {
-    private Long id;
 
     private String flightNumber;
 
@@ -24,7 +22,13 @@ public class TicketDto implements Serializable {
 
     private double price;
 
-    public TicketDto(Ticket ticket) {
+    public TicketDto(String flightNumber, String departureAirport, String arrivalAirport, LocalDateTime departureTime, LocalDateTime arrivalTime, double price) {
+        this.flightNumber = flightNumber;
+        this.departureAirport = departureAirport;
+        this.arrivalAirport = arrivalAirport;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.price = price;
     }
 
     public TicketDto() {
